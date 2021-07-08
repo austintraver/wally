@@ -6,10 +6,10 @@ import (
 	"os"
 	"path"
 
+	"github.com/austintraver/wally/wally"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/wailsapp/wails"
-	"github.com/zsa/wally/wally"
 )
 
 var stylesheet = path.Join("frontend/build/static/css/main.css")

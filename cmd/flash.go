@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/austintraver/wally/wally"
 	"github.com/caarlos0/spin"
 	"github.com/spf13/cobra"
-	"github.com/zsa/wally/wally"
 	"gopkg.in/cheggaaa/pb.v1"
 )
 
@@ -74,8 +74,6 @@ var flashCmd = &cobra.Command{
 }
 
 var configFile string
-
-// The ConsoleFlash function
 
 func init() {
 	rootCmd.AddCommand(flashCmd)

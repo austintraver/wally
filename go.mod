@@ -1,6 +1,4 @@
-module github.com/zsa/wally
-
-replace github.com/zsa/wally v0.0.0-20210409044054-af7f115cb824 => github.com/austintraver/wally v0.0.0-20210417035254-b77b29596d9a
+module github.com/austintraver/wally
 
 go 1.16
 

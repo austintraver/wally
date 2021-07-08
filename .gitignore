@@ -35,3 +35,4 @@ wally-res.syso
 ui
 wally-winx64.exe
 *.dll
+/node_modules/

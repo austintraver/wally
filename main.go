@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/zsa/wally/cmd"
+	"github.com/austintraver/wally/cmd"
 )
 
 func main() {
