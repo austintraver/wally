@@ -82,7 +82,6 @@ func TeensyFlash(s *State) {
 	}
 
 	s.Step = 4
-	s.emitUpdate()
 
 	// Loop on the firmware data and program
 	var addr uint32
@@ -113,7 +112,6 @@ func TeensyFlash(s *State) {
 		message := fmt.Sprintf("Sent %d bytes out of %d", addr, ergodoxCodeSize)
 		s.Log("info", message)
 		s.FlashProgress.Sent += bytes
-		s.emitUpdate()
 	}
 
 	time.Sleep(1 * time.Second)

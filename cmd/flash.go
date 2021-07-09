@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/austintraver/loading"
 	"github.com/austintraver/wally/wally"
-	"github.com/caarlos0/spin"
 	"github.com/spf13/cobra"
 	"gopkg.in/cheggaaa/pb.v1"
 )
@@ -33,7 +33,7 @@ func runFlashCmd(cmd *cobra.Command, args []string) {
 	var progress *pb.ProgressBar
 	progressStarted := false
 
-	spinner := spin.New("%s Press the reset button of your keyboard.")
+	spinner := loading.New("%s Press the reset button of your keyboard.")
 	spinner.Start()
 	spinnerStopped := false
 
@@ -62,7 +62,7 @@ func runFlashCmd(cmd *cobra.Command, args []string) {
 		progress.Set(state.FlashProgress.Sent)
 	}
 	progress.Finish()
-	fmt.Println("Your keyboard was successfully flashed and rebooted. Enjoy the new firmware!")
+	fmt.Println("⚡️ Your keyboard firmware has successfully been flashed.")
 }
 
 var flashCmd = &cobra.Command{

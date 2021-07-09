@@ -192,7 +192,6 @@ func DFUFlash(s *State) {
 	}
 
 	s.Step = 4
-	s.emitUpdate()
 
 	err = dfuCommand(dev, 0, eraseFlash, &dfuStatus)
 	if err != nil {
@@ -234,7 +233,6 @@ func DFUFlash(s *State) {
 		message := fmt.Sprintf("Sent %d bytes out of %d", page+bytes, fileSize)
 		s.Log("info", message)
 		s.FlashProgress.Sent += bytes
-		s.emitUpdate()
 	}
 
 	time.Sleep(1 * time.Second)

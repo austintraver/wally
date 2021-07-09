@@ -10,8 +10,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/wailsapp/wails"
 )
 
 type stateLog struct {
@@ -26,6 +24,8 @@ type FlashProgress struct {
 	Sent  int `json:"sent"`  // total of bytes sent
 }
 
+// Step indicates which step of the firmware flashing process is currently
+// taking place.
 type Step int8
 
 const (
@@ -39,7 +39,6 @@ const (
 
 // State represents the global state of the application
 type State struct {
-	runtime       *wails.Runtime
 	AppVersion    string        `json:"appVersion"`
 	Device        Device        `json:"device"`        // The user selected usb device
 	Devices       []Device      `json:"devices"`       // The list of usb devices connected
@@ -76,28 +75,10 @@ func NewState(step Step, firmwarePath string) (s *State, err error) {
 	return
 }
 
-func (s *State) WailsInit(runtime *wails.Runtime) error {
-	s.runtime = runtime
-	runtime.Events.On("wails:loaded", func(...interface{}) {
-		s.emitUpdate()
-		s.ProbeDevices()
-	})
-	return nil
-}
-
-func (s *State) emitUpdate() {
-	// Don't emit an update if there is no runtime member variable
-	if s.runtime == nil {
-		return
-	}
-	s.runtime.Events.Emit("state_update", s)
-}
-
 func (s *State) Log(level string, message string) {
 	now := time.Now()
 	l := stateLog{Timestamp: now.Unix(), Level: level, Message: jsonEscape(message)}
 	s.Logs = append(s.Logs, l)
-	s.emitUpdate()
 }
 
 func (s *State) ProbeDevices() {
@@ -105,12 +86,10 @@ func (s *State) ProbeDevices() {
 		s.Devices = ProbeDevices(s)
 		if len(s.Devices) > 1 {
 			s.Step = SelectKeyboard
-			s.emitUpdate()
 		}
 		if len(s.Devices) == 1 {
 			s.Device = s.Devices[0]
 			s.Step = FirmwareFile
-			s.emitUpdate()
 		}
 		time.Sleep(1 * time.Second)
 	}
@@ -134,25 +113,6 @@ func (s *State) SelectDevice(model Model, bus int, port int) {
 	device := Device{Model: model, Bus: bus, Port: port}
 	s.Device = device
 	s.Step = FirmwareFile
-	s.emitUpdate()
-}
-
-func (s *State) SelectFirmware() {
-	filter := ""
-	if s.Device.Model == 1 {
-		filter = "*.hex"
-	} else {
-		filter = "*.bin"
-	}
-	filePath := s.runtime.Dialog.SelectFile("Select a firmware file", filter)
-
-	s.FirmwarePath = jsonEscape(filePath)
-
-	if s.FirmwarePath != "" {
-		s.Step = Waiting
-		s.FlashFirmware()
-		s.emitUpdate()
-	}
 }
 
 func (s *State) SelectFirmwareWithData(data string) {
@@ -174,12 +134,7 @@ func (s *State) SelectFirmwareWithData(data string) {
 		s.FirmwarePath = jsonEscape(filePath)
 		s.Step = Flashing
 		s.FlashFirmware()
-		s.emitUpdate()
 	}
-}
-
-func (s *State) Shutdown() {
-	s.runtime.Window.Close()
 }
 
 func (s *State) FlashFirmware() {
