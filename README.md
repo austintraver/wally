@@ -24,7 +24,7 @@ Below, is an interactive demonstration of the command-line interface.
 ## Installation
 
 ```shell
-go get github.com/austintraver/wally
+go install github.com/austintraver/wally@latest
 ```
 
 ## Usage

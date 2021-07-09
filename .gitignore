@@ -5,3 +5,5 @@ Wally_rc.syso
 
 *.dll
 /node_modules/
+
+.idea/dictionaries
