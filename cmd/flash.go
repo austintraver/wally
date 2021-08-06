@@ -55,7 +55,10 @@ func runFlashCmd(cmd *cobra.Command, args []string) {
 		// If we are no longer probing, and we have not stopped the "pinwheel",
 		// spinning as we idle, then now is the time to do so
 		if !spinnerStopped {
-			spinner.Stop()
+			_, err := spinner.Stop()
+			if err != nil {
+				log.Fatalln(err)
+			}
 			spinnerStopped = true
 		}
 		// Update the progress bar with our current status
