@@ -48,13 +48,13 @@ func runFlashCmd(cmd *cobra.Command, args []string) {
 		}
 		// If we are no longer probing, and we have not begun tracking
 		// progress, create a new progress bar to print to the console
-		if progressStarted == false {
+		if !progressStarted {
 			progress = pb.StartNew(state.FlashProgress.Total)
 			progressStarted = true
 		}
 		// If we are no longer probing, and we have not stopped the "pinwheel",
 		// spinning as we idle, then now is the time to do so
-		if spinnerStopped == false {
+		if !spinnerStopped {
 			spinner.Stop()
 			spinnerStopped = true
 		}
@@ -63,6 +63,7 @@ func runFlashCmd(cmd *cobra.Command, args []string) {
 	}
 	progress.Finish()
 	fmt.Println("⚡️ Your keyboard firmware has successfully been flashed.")
+	fmt.Println("💡 Visit https://configure.zsa.io/train to practice.")
 }
 
 var flashCmd = &cobra.Command{
